@@ -1,0 +1,11 @@
+name: pulumi-ec2-server
+description: Learning Project With Pulumi
+runtime:
+  name: python
+  options:
+    toolchain: pip
+    virtualenv: venv
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: aws-python
