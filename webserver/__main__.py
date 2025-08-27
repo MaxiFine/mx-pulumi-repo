@@ -1,37 +1,122 @@
-# """An AWS Python Pulumi program"""
-
-# import pulumi
-# from pulumi_aws import s3
-
-# # Create an AWS resource (S3 Bucket)
-# bucket = s3.Bucket('my-bucket')
-
-# # Export the name of the bucket
-# pulumi.export('bucket_name', bucket.id)
-
 import pulumi
 import pulumi_aws as aws
-from pulumi import export
+# from pulumi import export
 
-size = 't2.micro'
-ami = aws.ec2.get_ami(most_recent="true",
-                  owners=["137112412989"],
-                  filters=[{"name":"name","values":["amzn2-ami-hvm-*"]}])
+# Pulumi VPC Components
+vpc = aws.ec2.Vpc('vpc',
+    cidr_block='10.0.0.0/16',
+    enable_dns_support=True,
+    enable_dns_hostnames=True)
 
-group = aws.ec2.SecurityGroup('sec-group',
-    description='Enable HTTP access and SSH access',
+# Pulumi Subnet Components
+public_subnet = aws.ec2.Subnet('public-subnet',
+    vpc_id=vpc.id,
+    cidr_block='10.0.1.0/24',
+    availability_zone='us-west-1a',
+    tags = {
+        'Name': 'public-subnet',
+        'Environment': 'dev',
+        'owner': 'mx-devops'
+    }
+    )
+
+# Pulumi Internet gateway
+igw = aws.ec2.InternetGateway('igw',
+    vpc_id=vpc.id,
+    tags = {
+        'Name': 'igw',
+        'Environment': 'dev',
+        'owner': 'mx-devops'
+    }
+)
+
+# Pulumi Route Table
+public_route_table = aws.ec2.RouteTable('public-route-table',
+    vpc_id=vpc.id,
+    routes=[
+        {
+            'cidr_block': '0.0.0.0/0',
+            'gateway_id': igw.id
+        }
+    ],
+    tags={
+        'Name': 'public-route-table',
+        'Environment': 'dev',
+        'owner': 'mx-devops'
+    }
+)
+
+# Route Table Association
+public_route_table_association = aws.ec2.RouteTableAssociation(
+    'public-route-table-association',
+    subnet_id=public_subnet.id,
+    route_table_id=public_route_table.id
+)
+
+# Pulumi Security Group
+security_group = aws.ec2.SecurityGroup(
+    'public-security-group',
+    description='Enable HTTP access',
+    vpc_id=vpc.id,
     ingress=[
-        { 'protocol': 'tcp', 'from_port': 22, 'to_port': 22, 'cidr_blocks': ['0.0.0.0/0'] },
-        { 'protocol': 'tcp', 'from_port': 80, 'to_port': 80, 'cidr_blocks': ['0.0.0.0/0'] }
-    ])
+        {
+            'from_port': 80,
+            'to_port': 80,
+            'protocol': 'tcp',
+            'cidr_blocks': ['0.0.0.0/0']
+        }
+    ],
+    egress=[
+        {
+            'from_port': 0,
+            'to_port': 0,
+            'protocol': '-1',
+            'cidr_blocks': ['0.0.0.0/0']
+        }
+    ],
+    tags={
+        'Name': 'public-security-group',
+        'Environment': 'dev',
+        'owner': 'mx-devops'
+    }
+)
 
-server = aws.ec2.Instance('ec2-webserver',
-    instance_type=size,
-    vpc_security_group_ids=[group.id], # reference security group from above
-    ami=ami.id)
+# Pulumi EC2 Instance
+ami = aws.ec2.get_ami(
+    most_recent=True,
+    owners=["amazon"],
+    filters=[
+        {
+            "name": "name",
+            # "values": ["amzn2-ami-hvm-*-x86_64-gp2"]
+            "values": ["amzn2-ami-hvm-*"]
+        }
+    ]
+)
 
-# pulumi.export('publicIp', server.public_ip)
-# pulumi.export('publicIp', server.public_ip)
-export('publicHostName', server.public_dns)
-export('instanceId', server.id)
-export('publicIp', server.public_ip)
+user_data = """
+
+        #!/bin/bash
+echo "Hello, world!" > index.html
+nohup python -m SimpleHTTPServer 80 &
+"""
+
+ec2_instance = aws.ec2.Instance(
+    'webserver-instance',
+    instance_type='t2.micro',
+    vpc_security_group_ids=[security_group.id],
+    ami=ami.id,
+    user_data=user_data,
+    subnet_id=public_subnet.id,
+    associate_public_ip_address=True,
+    # public_route_table_association=public_route_table_association.id
+    
+    )
+
+pulumi.export('instance_ip', ec2_instance.public_ip)
+pulumi.export('security_group_id', security_group.id)
+pulumi.export('vpc_id', vpc.id)
+pulumi.export('subnet_id', public_subnet.id)
+pulumi.export('route_table_id', public_route_table.id)
+pulumi.export('igw_id', igw.id)
+pulumi.export('instance_ami', ami.id)
