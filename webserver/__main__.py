@@ -75,11 +75,11 @@ public_route_table_association = aws.ec2.RouteTableAssociation(
     subnet_id=public_subnet.id,
     route_table_id=public_route_table.id,
     # internet_gateway_id=igw.id,
-    tags = {
-        'Name': 'public-route-table-association',
-        'Environment': 'dev',
-        'owner': 'mx-devops'
-    }
+    # tags = {
+    #     'Name': 'public-route-table-association',
+    #     'Environment': 'dev',
+    #     'owner': 'mx-devops'
+    # }
 )
 
 # Pulumi Security Group
@@ -123,7 +123,8 @@ ami = aws.ec2.get_ami(
     ]
 )
 
-user_data = """#!/bin/bash
+user_script = """
+#!/bin/bash
 sudo apt-get update
 sudo apt-get install nginx -y
 sudo systemctl enable nginx
@@ -190,13 +191,21 @@ sudo ufw allow 'Nginx HTTPS'
 echo "Nginx installed successfully! You can access your server at http://$(curl -s ifconfig.me)"
 """
 
+# keypair = aws.ec2.KeyPair(
+#     'aws-365-keypair',
+#     public_key='ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC3...'
+# )
+
 ec2_instance = aws.ec2.Instance(
     'webserver-instance',
-    instance_type='t2.micro',
+    instance_type='t3.micro',
     # vpc_security_group_ids=[security_group.id],
     ami=ami.id,
-    user_data=user_data,
-    security_group_ids=[security_group.id],
+    # keypair='aws-365-keypair',
+    key_name='aws-365-keypair',
+    user_data=user_script,
+    # security_group_ids=[security_group.id],
+    security_groups=[security_group.id],
     subnet_id=public_subnet.id,
     associate_public_ip_address=True,
     # public_route_table_association=public_route_table_association.id
