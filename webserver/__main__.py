@@ -2,6 +2,22 @@ import pulumi
 import pulumi_aws as aws
 # from pulumi import export
 
+# Get dynamic AZs
+availability_zones = aws.get_availability_zones(state='available')
+selected_az = availability_zones.names[0]
+
+# Get AMI's dynamically
+dynamic_ami = aws.ec2.get_ami(
+    most_recent=True,
+    owners=["amazon"],
+    filters=[
+        {
+            "name": "name",
+            "values": ["amzn2-ami-hvm-*"]
+        }
+    ]
+)
+
 # Pulumi VPC Components
 vpc = aws.ec2.Vpc('mx-pulumi-vpc',
     cidr_block='10.0.0.0/16',
@@ -12,7 +28,8 @@ vpc = aws.ec2.Vpc('mx-pulumi-vpc',
 public_subnet = aws.ec2.Subnet('public-subnet',
     vpc_id=vpc.id,
     cidr_block='10.0.1.0/24',
-    availability_zone='us-east-1a',
+    # availability_zone='us-east-1a',
+    availability_zone=selected_az,  # dynamic az's implementation
     tags = {
         'Name': 'public-subnet',
         'Environment': 'dev',
