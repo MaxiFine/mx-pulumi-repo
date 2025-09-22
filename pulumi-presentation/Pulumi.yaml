@@ -1,0 +1,24 @@
+# Pulumi.yaml - Project Configuration
+name: pulumi-presentation
+runtime: python
+description: Pulumi Infrastructure as Code Presentation Demo
+
+config:
+  environment:
+    description: The deployment environment (dev, staging, production)
+    default: demo
+  instance_count:
+    description: Number of EC2 instances to create
+    default: 1
+  enable_monitoring:
+    description: Enable CloudWatch monitoring
+    default: true
+  enable_backup:
+    description: Enable backup configuration
+    default: false
+  cost_optimization:
+    description: Enable cost optimization features
+    default: true
+  deploy_production:
+    description: Enable production environment deployment
+    default: false
