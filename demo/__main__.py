@@ -1,42 +1,31 @@
 """
-PULUMI CORE CONCEPTS DEMO - STACKS
-==================================
+CORE CONCEPT 1: STACKS - Environment-specific deployments
+========================================================
 
-This demo shows environment-specific deployments using Pulumi stacks.
-Same code, different configurations per environment.
+This demo shows how Pulumi uses stacks to manage multiple environments
+with the same infrastructure code but different configurations.
 
-To switch to different demos:
-- Copy 02_resources_demo.py to __main__.py for Resources demo
-- Copy 03_configuration_demo.py to __main__.py for Configuration demo  
-- Copy 04_state_demo.py to __main__.py for State demo
-- Copy 05_preview_update_demo.py to __main__.py for Preview/Update demo
-
-Current Demo: STACKS - Environment-specific deployments
-Commands to try:
-1. pulumi stack init dev
-2. pulumi stack init staging
-3. pulumi stack init prod
-4. pulumi stack select dev && pulumi up
-5. pulumi stack select staging && pulumi up
+Demo Flow:
+1. Run: pulumi stack init dev
+2. Run: pulumi stack init staging  
+3. Run: pulumi stack init prod
+4. Switch between stacks and deploy different configurations
 """
 
 import pulumi
 import pulumi_aws as aws
 
-# Demo: Enhanced Infrastructure as Code with Pulumi
-print("🏗️ STACKS DEMO: Environment-specific deployments")
-
 # Get current stack name - this is KEY for environment-specific behavior
 stack_name = pulumi.get_stack()
 
-print(f"🏗️  Deploying to STACK: {stack_name}")
+print(f"Deploying to STACK: {stack_name}")
 
 # Stack-specific configurations
 # Different configurations based on stack name
 stack_configs = {
     "dev": {
         "instance_type": "t2.micro",
-        "instance_count": 1,
+        "instance_count": 3,
         "environment": "development",
         "enable_monitoring": False
     },
@@ -48,7 +37,7 @@ stack_configs = {
     },
     "prod": {
         "instance_type": "t3.medium",
-        "instance_count": 3, 
+        "instance_count": 1, 
         "environment": "production",
         "enable_monitoring": True
     }
@@ -57,7 +46,7 @@ stack_configs = {
 # Get configuration for current stack (defaults to dev if not found)
 config = stack_configs.get(stack_name, stack_configs["dev"])
 
-print(f"📋 Configuration for {stack_name}:")
+print(f"Configuration for {stack_name}:")
 print(f"   - Instance Type: {config['instance_type']}")
 print(f"   - Instance Count: {config['instance_count']}")
 print(f"   - Environment: {config['environment']}")
@@ -147,7 +136,7 @@ cat > /var/www/html/index.html << EOF
 <html>
 <head><title>Stack Demo - {stack_name.upper()}</title></head>
 <body style="font-family: Arial; margin: 40px; background: #f0f8ff;">
-    <h1>🏗️ STACK DEMO: {stack_name.upper()}</h1>
+    <h1>STACK DEMO: {stack_name.upper()}</h1>
     <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
         <h2>Current Stack Configuration:</h2>
         <ul>
@@ -160,10 +149,10 @@ cat > /var/www/html/index.html << EOF
         </ul>
         
         <h3>Stack Concept Demonstration:</h3>
-        <p>✅ Same code, different configurations per stack</p>
-        <p>✅ Environment isolation through stacks</p>
-        <p>✅ Independent state management</p>
-        <p>✅ Easy environment promotion workflow</p>
+        <p>✓ Same code, different configurations per stack</p>
+        <p>✓ Environment isolation through stacks</p>
+        <p>✓ Independent state management</p>
+        <p>✓ Easy environment promotion workflow</p>
         
         <p><em>This instance was deployed using Pulumi Stacks!</em></p>
     </div>
@@ -198,6 +187,6 @@ pulumi.export("ssh_commands", [
     for instance in instances
 ])
 
-print(f"✅ {stack_name.upper()} stack configuration deployed!")
-print("🚀 Run 'pulumi stack output' to see all outputs")
-print("🔄 Try switching stacks: pulumi stack select <stack-name>")
+print(f"{stack_name.upper()} stack configuration deployed!")
+print("Run 'pulumi stack output' to see all outputs")
+print("Try switching stacks: pulumi stack select <stack-name>")
