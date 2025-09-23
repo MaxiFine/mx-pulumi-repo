@@ -1,0 +1,1 @@
+cd demo; $env:PULUMI_PYTHON_CMD = "C:/Users/MaxwellAdomako/amalitech/learning-projects/mx-pulumi-repo/.venv/Scripts/python.exe"; $env:PULUMI_CONFIG_PASSPHRASE = ""; pulumi up --yes
