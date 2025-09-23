@@ -10,3 +10,6 @@ __pycache__/
 *.pulumi.*
 cmd-notes.txt
 .vscode/
+aws-keypem.pem
+
+pulumi-aws-keypem.pem
