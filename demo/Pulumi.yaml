@@ -1,0 +1,12 @@
+name: pulumi-core-concepts-demo
+runtime: python
+description: Pulumi Core Concepts Demonstration Project
+
+template:
+  config:
+    aws:region:
+      description: The AWS region to deploy into
+      default: us-east-1
+    demo_type:
+      description: Which core concept to demonstrate (stacks|resources|configuration|state|preview_update)
+      default: stacks
