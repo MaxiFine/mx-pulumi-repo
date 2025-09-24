@@ -37,12 +37,12 @@ web_subnet = networking.create_public_subnet(
 )
 
 # Create private subnet for databases (optional)
-db_subnet = networking.create_private_subnet(
-    f"{project_name}-db", 
-    vpc.id,
-    "10.0.2.0/24",
-    "us-east-1a"
-)
+# db_subnet = networking.create_private_subnet(
+#     f"{project_name}-db", 
+#     vpc.id,
+#     "10.0.2.0/24",
+#     "us-east-1a"
+# )
 
 # Setup internet routing for public subnet
 networking.setup_public_routing(project_name, vpc.id, igw.id, web_subnet.id)
@@ -53,8 +53,8 @@ print("2. Creating security groups...")
 # Web server security group (HTTP, HTTPS, SSH)
 web_sg = security_groups.create_web_security_group(project_name, vpc.id)
 
-# Database security group (MySQL from web servers only)  
-db_sg = security_groups.create_database_security_group(project_name, vpc.id, web_sg.id)
+# # Database security group (MySQL from web servers only)  
+# db_sg = security_groups.create_database_security_group(project_name, vpc.id, web_sg.id)
 
 # 3. CREATE COMPUTE RESOURCES
 print("3. Creating compute resources...")
@@ -86,16 +86,16 @@ elif stack_name == "staging":
     )
     
     # Database server in private subnet
-    db_server = compute.create_database_server(
-        f"{project_name}-db",
-        db_subnet.id,
-        db_sg.id
-    )
+    # db_server = compute.create_database_server(
+    #     f"{project_name}-db",
+    #     db_subnet.id,
+    #     db_sg.id
+    # )
     
     # Export staging outputs
     web_urls = [server.public_ip.apply(lambda ip: f"http://{ip}") for server in web_servers]
     pulumi.export("web_urls", web_urls)
-    pulumi.export("database_private_ip", db_server.private_ip)
+    # pulumi.export("database_private_ip", db_server.private_ip)
     pulumi.export("server_count", len(web_servers))
 
 elif stack_name == "prod":
@@ -110,17 +110,17 @@ elif stack_name == "prod":
     )
     
     # Database server
-    db_server = compute.create_database_server(
-        f"{project_name}-db",
-        db_subnet.id, 
-        db_sg.id
-    )
+    # db_server = compute.create_database_server(
+    #     f"{project_name}-db",
+    #     db_subnet.id, 
+    #     db_sg.id
+    # )
     
-    # Export production outputs
-    web_urls = [server.public_ip.apply(lambda ip: f"http://{ip}") for server in web_servers]
-    pulumi.export("web_urls", web_urls)
-    pulumi.export("database_private_ip", db_server.private_ip)
-    pulumi.export("server_count", len(web_servers))
+    # # Export production outputs
+    # web_urls = [server.public_ip.apply(lambda ip: f"http://{ip}") for server in web_servers]
+    # pulumi.export("web_urls", web_urls)
+    # pulumi.export("database_private_ip", db_server.private_ip)
+    # pulumi.export("server_count", len(web_servers))
     
 else:
     print("   DEFAULT: Simple 1 web server demo")
