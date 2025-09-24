@@ -1,0 +1,67 @@
+name: modular-infrastructure-demo
+runtime: python
+description: |
+  Modular Infrastructure as Code Demonstration using Pulumi and Python
+  
+  This project showcases the advantages of using real programming languages 
+  for Infrastructure as Code through advanced Python patterns and reusable modules.
+  
+  Key Features Demonstrated:
+  - Object-Oriented Programming with classes and inheritance
+  - Design Patterns (Factory, Manager, Builder, Composition)
+  - Type Safety and Data Classes
+  - Code Reuse across different environments
+  - Modular architecture enabling composition
+  - Same codebase for dev/staging/production with different configurations
+  
+  Modules:
+  - base_infrastructure: VPC, subnets, routing
+  - security_groups: Reusable security patterns
+  - compute: EC2 instances and server factories
+  - application: Multi-tier and microservices patterns
+
+config:
+  # Default configuration values
+  aws:region:
+    description: AWS region for deployment
+    default: us-east-1
+  
+  # Application configuration
+  app-name:
+    description: Name of the application
+    default: modular-demo
+  
+  environment:
+    description: Deployment environment
+    default: demo
+  
+  # Instance configuration
+  instance-type:
+    description: EC2 instance type
+    default: t2.micro
+  
+  web-instance-count:
+    description: Number of web server instances
+    default: 2
+
+template:
+  description: Modular Pulumi Infrastructure Template
+  quickstart: |
+    This template demonstrates advanced Infrastructure as Code patterns using Pulumi and Python.
+    
+    Available stacks:
+    - dev: Development environment (minimal setup)
+    - staging: Staging environment (multi-tier) 
+    - prod: Production environment (high availability)
+    - microservices-demo: Microservices architecture
+    - default: Component demonstration
+    
+    Deploy with: pulumi up
+  
+  config:
+    - name: aws:region
+      description: AWS region
+      default: us-east-1
+    - name: environment
+      description: Environment name
+      default: demo
