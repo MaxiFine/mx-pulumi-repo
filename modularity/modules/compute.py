@@ -78,17 +78,17 @@ cat > /var/www/html/index.html << 'EOF'
         
         <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin: 20px 0;">
             <h3 class="highlight">Created with Simple Modules:</h3>
-            <p>✅ Networking module - VPC, subnets, routing</p>
-            <p>✅ Security Groups module - Web server security</p>
-            <p>✅ Compute module - This web server!</p>
+            <p>* Networking module - VPC, subnets, routing</p>
+            <p>* Security Groups module - Web server security</p>
+            <p>* Compute module - This web server!</p>
         </div>
         
         <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin: 20px 0;">
             <h3 class="highlight">Why Pulumi Modules?</h3>
-            <p>📦 <strong>Reusable</strong> - Same code, different environments</p>
-            <p>🔧 <strong>Simple</strong> - Easy functions, not complex classes</p>
-            <p>🐍 <strong>Python</strong> - Real programming language benefits</p>
-            <p>🎯 <strong>Organized</strong> - Separate concerns into modules</p>
+            <p>* <strong>Reusable</strong> - Same code, different environments</p>
+            <p>* <strong>Simple</strong> - Easy functions, not complex classes</p>
+            <p>* <strong>Python</strong> - Real programming language benefits</p>
+            <p>* <strong>Organized</strong> - Separate concerns into modules</p>
         </div>
         
         <p style="margin-top: 30px;">
@@ -118,7 +118,7 @@ chown apache:apache /var/www/html/index.html
         }
     )
     
-    print(f"✅ Web server created: {name}")
+    print(f"Web server created: {name}")
     print(f"   Instance type: t2.micro")
     print(f"   AMI: {ami.id}")
     return instance
@@ -170,7 +170,7 @@ echo "Database setup completed on {name}" > /var/log/db-setup.log
         }
     )
     
-    print(f"✅ Database server created: {name}")
+    print(f"Database server created: {name}")
     print(f"   Instance type: t2.micro")
     print(f"   MySQL will be installed automatically")
     return instance
@@ -206,5 +206,5 @@ def create_multiple_instances(base_name: str, count: int, subnet_ids: list, secu
         
         instances.append(instance)
     
-    print(f"✅ Created {count} instances with base name: {base_name}")
+    print(f"Created {count} instances with base name: {base_name}")
     return instances

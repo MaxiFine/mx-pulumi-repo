@@ -29,7 +29,7 @@ def create_vpc(name: str, cidr: str = "10.0.0.0/16"):
         tags={"Name": f"{name}-vpc"}
     )
     
-    print(f"✅ VPC created: {name}-vpc ({cidr})")
+    print(f"VPC created: {name}-vpc ({cidr})")
     return vpc
 
 
@@ -50,7 +50,7 @@ def create_internet_gateway(name: str, vpc_id):
         tags={"Name": f"{name}-igw"}
     )
     
-    print(f"✅ Internet Gateway created: {name}-igw")
+    print(f"Internet Gateway created: {name}-igw")
     return igw
 
 
@@ -79,7 +79,7 @@ def create_public_subnet(name: str, vpc_id, cidr: str, az: str):
         }
     )
     
-    print(f"✅ Public subnet created: {name}-public ({cidr})")
+    print(f"Public subnet created: {name}-public ({cidr})")
     return subnet
 
 
@@ -108,7 +108,7 @@ def create_private_subnet(name: str, vpc_id, cidr: str, az: str):
         }
     )
     
-    print(f"✅ Private subnet created: {name}-private ({cidr})")
+    print(f"Private subnet created: {name}-private ({cidr})")
     return subnet
 
 
@@ -144,5 +144,5 @@ def setup_public_routing(name: str, vpc_id, igw_id, subnet_id):
         route_table_id=route_table.id
     )
     
-    print(f"✅ Public routing setup: {name}-public-rt")
+    print(f"Public routing setup: {name}-public-rt")
     return route_table

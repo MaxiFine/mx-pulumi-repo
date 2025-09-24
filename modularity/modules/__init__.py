@@ -42,6 +42,6 @@ This approach shows the power of Pulumi modules without overwhelming complexity!
 __version__ = "1.0.0-simple"
 __author__ = "Maxwell Adomako - DevOps Engineer"
 
-print("📦 Simple Pulumi Modules Loaded")
+print("Simple Pulumi Modules Loaded")
 print("   Perfect for new engineers learning infrastructure modules!")
-print("   🚀 Ready to build modular infrastructure!")
+print("   Ready to build modular infrastructure!")

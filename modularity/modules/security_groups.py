@@ -65,7 +65,7 @@ def create_web_security_group(name: str, vpc_id):
         tags={"Name": f"{name}-web-sg", "Type": "Web"}
     )
     
-    print(f"✅ Web security group created: {name}-web-sg")
+    print(f"Web security group created: {name}-web-sg")
     print("   Allows: HTTP (80), HTTPS (443), SSH (22)")
     return sg
 
@@ -120,7 +120,7 @@ def create_database_security_group(name: str, vpc_id, web_sg_id):
         tags={"Name": f"{name}-db-sg", "Type": "Database"}
     )
     
-    print(f"✅ Database security group created: {name}-db-sg")
+    print(f"Database security group created: {name}-db-sg")
     print("   Allows: MySQL (3306) from web servers, SSH (22)")
     return sg
 
@@ -168,6 +168,6 @@ def create_custom_security_group(name: str, vpc_id, allowed_ports: list, descrip
     )
     
     ports_str = ", ".join(str(port) for port in allowed_ports)
-    print(f"✅ Custom security group created: {name}-custom-sg")
+    print(f"Custom security group created: {name}-custom-sg")
     print(f"   Allows ports: {ports_str}")
     return sg

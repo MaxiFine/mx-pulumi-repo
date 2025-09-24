@@ -13,14 +13,14 @@ from modules import networking, security_groups, compute
 
 # Get current stack name
 stack_name = pulumi.get_stack()
-print(f"\n🚀 SIMPLE MODULAR DEMO - Stack: {stack_name}")
+print(f"\nSIMPLE MODULAR DEMO - Stack: {stack_name}")
 print("=" * 50)
 
 # Project name for consistent naming
-project_name = f"simple-demo-{stack_name}"
+project_name = f"mx-demo-{stack_name}"
 
 # 1. CREATE NETWORKING (VPC, Subnets, Internet Access)
-print("1️⃣  Creating networking components...")
+print("1. Creating networking components...")
 
 # Create VPC
 vpc = networking.create_vpc(project_name, "10.0.0.0/16")
@@ -48,7 +48,7 @@ db_subnet = networking.create_private_subnet(
 networking.setup_public_routing(project_name, vpc.id, igw.id, web_subnet.id)
 
 # 2. CREATE SECURITY GROUPS
-print("2️⃣  Creating security groups...")
+print("2. Creating security groups...")
 
 # Web server security group (HTTP, HTTPS, SSH)
 web_sg = security_groups.create_web_security_group(project_name, vpc.id)
@@ -57,11 +57,11 @@ web_sg = security_groups.create_web_security_group(project_name, vpc.id)
 db_sg = security_groups.create_database_security_group(project_name, vpc.id, web_sg.id)
 
 # 3. CREATE COMPUTE RESOURCES
-print("3️⃣  Creating compute resources...")
+print("3. Creating compute resources...")
 
 # Stack-specific configuration (same modules, different setups!)
 if stack_name == "dev":
-    print("   📋 DEV Environment: 1 web server only")
+    print("   DEV Environment: 1 web server only")
     
     # Single web server for development
     web_server = compute.create_web_server(
@@ -75,7 +75,7 @@ if stack_name == "dev":
     pulumi.export("server_count", 1)
 
 elif stack_name == "staging":
-    print("   📋 STAGING Environment: 2 web servers + database")
+    print("   STAGING Environment: 2 web servers + database")
     
     # Multiple web servers for load testing
     web_servers = compute.create_multiple_instances(
@@ -99,7 +99,7 @@ elif stack_name == "staging":
     pulumi.export("server_count", len(web_servers))
 
 elif stack_name == "prod":
-    print("   📋 PRODUCTION Environment: 3 web servers + database")
+    print("   PRODUCTION Environment: 3 web servers + database")
     
     # Production setup with multiple web servers
     web_servers = compute.create_multiple_instances(
@@ -123,7 +123,7 @@ elif stack_name == "prod":
     pulumi.export("server_count", len(web_servers))
     
 else:
-    print("   📋 DEFAULT: Simple 1 web server demo")
+    print("   DEFAULT: Simple 1 web server demo")
     
     # Default: just one web server
     web_server = compute.create_web_server(
@@ -147,6 +147,6 @@ pulumi.export("modules_used", [
     "compute - EC2 web and database servers"
 ])
 
-print(f"✅ {stack_name.upper()} infrastructure deployed successfully!")
-print("🔄 Same modules, different configurations!")
+print(f"Infrastructure for {stack_name.upper()} deployed successfully!")
+print("Same modules, different configurations!")
 print("=" * 50)
