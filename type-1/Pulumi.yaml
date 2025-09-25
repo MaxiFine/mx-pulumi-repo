@@ -1,0 +1,11 @@
+name: demo-resources
+description: A demo Project using python Languae
+runtime:
+  name: python
+  options:
+    toolchain: pip
+    virtualenv: venv
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: aws-python

@@ -1,0 +1,77 @@
+cd demo; $env:PULUMI_PYTHON_CMD = "C:/Users/MaxwellAdomako/amalitech/learning-projects/mx-pulumi-repo/.venv/Scripts/python.exe"; $env:PULUMI_CONFIG_PASSPHRASE = ""; pulumi up --yes
+
+pulumi config set aws:region us-east-1
+
+pulumi stack ls
+
+pulumi stack init presentation-demo
+
+
+cd import-demo
+pulumi import aws:s3/bucket:Bucket my-imported-bucket123 pulumi-import-bucket-123
+# ✅ Successfully imported!
+
+Removing protections
+pulumi state unprotect "urn:pulumi:demo::pulumi-import-demo::aws:s3/bucket:Bucket::my-imported-bucket123"
+
+
+impoeted code
+import pulumi
+import pulumi_aws as aws
+
+my_imported_bucket = aws.s3.Bucket("my-imported-bucket",
+    bucket="pulumi-import-demo",
+    grants=[{
+        "id": "5314dff584f7922aff035923a64c18e13bea8fc523b033bd392f8a3efed336f9",
+        "permissions": ["FULL_CONTROL"],
+        "type": "CanonicalUser",
+    }],
+    region="us-east-1",
+    request_payer="BucketOwner",
+    server_side_encryption_configuration={
+        "rule": {
+            "apply_server_side_encryption_by_default": {
+                "sse_algorithm": "AES256",
+            },
+            "bucket_key_enabled": True,
+        },
+    },
+    tags={
+        "test": "import",
+    },
+    opts = pulumi.ResourceOptions(protect=True))
+
+
+    ##################
+    Steps  to import
+    #################
+pulumi import aws:s3/bucket:Bucket my-imported-bucket pulumi-import-demo
+
+2. Add changes and do 
+pulumi up --yes
+
+if protected cleanup
+unprotect
+pulumi state unprotect "urn:pulumi:demo::pulumi-import-demo::aws:s3/bucket:Bucket::my-imported-bucket"
+
+pulumi state unprotect "urn:pulumi:demo::pulumi-import-demo::aws:s3/bucket:Bucket::imported-bucket"
+
+Now let's create a completely fresh stack for our simple demo:
+pulumi stack rm demo --yes
+pulumi stack rm demo --force
+
+Now let's create a fresh stack and do the simple demo:
+pulumi stack init simple-demo
+pulumi config set aws:region us-east-1
+
+Now let's import the bucket with our simple demo:
+pulumi import aws:s3/bucket:Bucket my-imported-bucket pulumi-import-demo
+
+Now
+Perfect! Now let's deploy our simple configuration to add versioning:
+pulumi up --yes
+
+Excellent! Let's see the final results:
+
+Final work
+pulumi stack output

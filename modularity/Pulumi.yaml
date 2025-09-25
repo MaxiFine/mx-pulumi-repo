@@ -1,0 +1,3 @@
+name: simple-modular-demo
+runtime: python
+description: Simple Modular Infrastructure Demo - Perfect for learning Pulumi modules!

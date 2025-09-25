@@ -1,0 +1,11 @@
+name: demo-test-project
+description: A mini demonstration with Pulumi
+runtime:
+  name: python
+  options:
+    toolchain: pip
+    virtualenv: venv
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: aws-python

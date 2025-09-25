@@ -1,0 +1,15 @@
+.venv/
+demo/__pycache__/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+
+# Ignore Pulumi state files
+*.pulumi.*
+cmd-notes.txt
+.vscode/
+aws-keypem.pem
+
+pulumi-aws-keypem.pem
