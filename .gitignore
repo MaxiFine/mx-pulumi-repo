@@ -8,8 +8,8 @@ __pycache__/
 
 # Ignore Pulumi state files
 *.pulumi.*
-cmd-notes.txt
 .vscode/
 aws-keypem.pem
 
 pulumi-aws-keypem.pem
+cmd-notes.txt
