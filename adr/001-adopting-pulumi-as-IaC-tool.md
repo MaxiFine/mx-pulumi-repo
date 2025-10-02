@@ -4,11 +4,13 @@
 
 **Date**: 2025-10-01
 
-**Deciders**: Maxwell Adomako, Dev team
+* Deciders: 
+   - Maxwell Adomako
+   - Ebenezer Butias
 
 **Technical Lead**: Maxwell Adomako
 
-**Pulumi Stack(s) Affected**: prod, staging, dev
+**Environments that will be Affected**: prod, staging, dev
 
 ## Context
 ### Problem Statement
@@ -42,21 +44,12 @@ Pulumi provides a modern approach to IaC that leverages familiar programming lan
 
 ### Key Technical Decisions
 **Infrastructure & Cloud Decisions**
-<!-- - Cloud Provider: [AWS/Azure/GCP/Multi-cloud]
-- Resource Organization: [Stack structure, component grouping]
-- State Management: [Pulumi Cloud/Self-hosted backend/Local]
-- Networking Strategy: [VPC design, subnet strategy] -->
 - Cloud Provider: AWS (primary), with multi-cloud capability for future
 - Resource Organization: Modular structure with separate modules for networking, security, and compute
 - State Management: Pulumi Cloud for team collaboration and state management
 - Networking Strategy: VPC per environment with public/private subnet patterns
 
 **Development & Deployment Decisions**
-<!-- - Language Choice: [Python/TypeScript/Go/etc.] 
-- Stack Strategy: [Per-environment vs shared stacks]
-- CI/CD Pipeline: [GitHub Actions/GitLab/Azure DevOps]
-- Testing Strategy: [Unit tests, integration tests for infrastructure]
-- Security Approach: [Secrets management, access controls] -->
 - Language Choice: Python (leverages existing team expertise)
 - Stack Strategy: Per-environment stacks (dev, staging, prod) with shared code
 - CI/CD Pipeline: GitHub Actions for automated preview and deployment
@@ -64,9 +57,6 @@ Pulumi provides a modern approach to IaC that leverages familiar programming lan
 - Security Approach: AWS IAM roles, Pulumi secrets for sensitive data
 
 **Operational Decisions**
-<!-- - Monitoring & Alerting: [CloudWatch/Datadog/etc.]
-- Backup & Recovery: [Strategy for state and resources]
-- Cost Management: [Tagging strategy, cost controls] -->
 - Monitoring & Alerting: CloudWatch integration with Pulumi resource tagging
 - Backup & Recovery: Pulumi Cloud state backup, infrastructure code in Git
 - Cost Management: Consistent tagging strategy, stack-level cost tracking
@@ -210,3 +200,5 @@ Pulumi provides a modern approach to IaC that leverages familiar programming lan
 ---
 *ADR Template Version: 1.1*  
 *Last Updated: 2025-10-01*
+
+let it be a generic one, not too detailed like this. to understand how to use adrs.
